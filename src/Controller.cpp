@@ -1,8 +1,12 @@
 //
-// Created by Keri Southwood-Smith on 1/10/20.
+// Created by Keri Southwood-Smith on 10 January 2020.
 //
 
 #include "Controller.h"
+
+Controller::Controller() : running(true) {
+    std::cout << "Controller()\n";
+}
 
 bool Controller::OnInit() {
     bool success = false;
@@ -37,22 +41,37 @@ void Controller::CleanUp() {
 }
 
 void Controller::Loop() {
-    Ball ball = Ball(window, renderer);
+    textureMap.AddTexture(renderer, "ball", "ball.bmp");
+    Ball ball = Ball(window, textureMap.GetID("ball"));
+    textureMap.AddTexture(renderer, "brick", "brick.bmp");
+    Brick brick = textureMap.GetID("brick");
+    brick.SetPosition(100, 100);
+    SDL_Event event;
 
-    for (int i = 0; i < 2000; ++i) {
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            EventHandler(&event);
+        }
+
         ball.Move();
-        Render(ball);
+        Render(ball, brick);
     }
 }
 
-void Controller::Render(Ball ball) {
+void Controller::Render(Ball &ball, Brick &brick) {
     SDL_Color background = {0x00, 0x00, 0xff, 0xFF};
-    SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, background.a);
+    SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b,
+                           background.a);
     SDL_RenderClear(renderer);
 
-    SDL_Rect placeBall = {ball.getXPos(), ball.getYPos(), 20, 20};
-    SDL_RenderCopy(renderer, ball.getTexture(), nullptr, &placeBall);
+    ball.Render();
+    brick.Render();
     SDL_RenderPresent(renderer);
-    SDL_Delay(1000/120);
+    SDL_Delay(1000 / 240);
 }
 
+void Controller::EventHandler(SDL_Event *event) {
+    if (event->type == SDL_QUIT) {
+        running = false;
+    }
+}

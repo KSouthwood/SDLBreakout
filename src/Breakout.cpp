@@ -1,5 +1,5 @@
 //
-// Created by Keri Southwood-Smith on 1/8/20.
+// Created by Keri Southwood-Smith on 08 January 2020.
 //
 #include "Breakout.h"
 
@@ -8,7 +8,6 @@ int main(int argc, char* argv[]) {
 
     if (game.OnInit()) {
         game.Loop();
-        SDL_Delay(2000);
     }
 
     game.CleanUp();
