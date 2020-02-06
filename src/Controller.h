@@ -5,6 +5,7 @@
 #ifndef BREAKOUT_CONTROLLER_H
 #define BREAKOUT_CONTROLLER_H
 
+#include <list>
 #include <SDL2/SDL.h>
 
 #include "Ball.h"
@@ -25,12 +26,17 @@ class Controller {
     bool running;
 
     TextureMap textureMap;
+    Ball ball;
+    std::list<Brick> bricks;
 
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;
 
-    void Render(Ball &ball, Brick &brick);
+    void Render();
     void EventHandler(SDL_Event *event);
+    bool CollisionCheck(Brick ccBrick);
+    void BounceBall(Brick &bBrick);
+    void LoadTextures();
 };
 
 #endif // BREAKOUT_CONTROLLER_H

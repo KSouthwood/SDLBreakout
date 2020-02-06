@@ -17,6 +17,11 @@ class Ball {
 
     void Move();
     void Render();
+    const SDL_Rect &getPosition() const;
+    int getXPos() const;
+    int getYPos() const;
+    void FlipXDir();
+    void FlipYDir();
 
   private:
     Texture *texture;

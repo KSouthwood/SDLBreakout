@@ -49,3 +49,10 @@ void Ball::Move() {
 }
 
 void Ball::Render() { texture->Render(position); }
+const SDL_Rect &Ball::getPosition() const { return bound_box; }
+
+void Ball::FlipXDir() { Ball::xDir = Ball::xDir == RIGHT ? LEFT : RIGHT; }
+void Ball::FlipYDir() { Ball::yDir = Ball::yDir == UP ? DOWN : UP; }
+
+int Ball::getXPos() const { return xPos; }
+int Ball::getYPos() const { return yPos; }

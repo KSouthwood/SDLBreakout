@@ -4,11 +4,14 @@
 
 #include "Controller.h"
 
+#define FUNC_CALL(func_name) std::cout << "********** " << #func_name << " **********\n"
+
 Controller::Controller() : running(true) {
-    std::cout << "Controller()\n";
+    FUNC_CALL(Controller());
 }
 
 bool Controller::OnInit() {
+    FUNC_CALL(OnInit());
     bool success = false;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == 0) {
@@ -29,6 +32,9 @@ bool Controller::OnInit() {
 }
 
 void Controller::CleanUp() {
+    FUNC_CALL(CleanUp());
+    textureMap.Cleanup();
+
     if (renderer != nullptr) {
         SDL_DestroyRenderer(renderer);
     }
@@ -41,11 +47,7 @@ void Controller::CleanUp() {
 }
 
 void Controller::Loop() {
-    textureMap.AddTexture(renderer, "ball", "ball.bmp");
-    Ball ball = Ball(window, textureMap.GetID("ball"));
-    textureMap.AddTexture(renderer, "brick", "brick.bmp");
-    Brick brick = textureMap.GetID("brick");
-    brick.SetPosition(100, 100);
+    LoadTextures();
     SDL_Event event;
 
     while (running) {
@@ -54,18 +56,27 @@ void Controller::Loop() {
         }
 
         ball.Move();
-        Render(ball, brick);
+        Render();
+        for (auto brick = bricks.begin(); brick != bricks.end(); ++brick) {
+            if (CollisionCheck(*brick)) {
+                BounceBall(*brick);
+                brick->setDestroyed(true);
+            }
+        }
     }
 }
 
-void Controller::Render(Ball &ball, Brick &brick) {
+void Controller::Render() {
+    FUNC_CALL(Render());
     SDL_Color background = {0x00, 0x00, 0xff, 0xFF};
     SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b,
                            background.a);
     SDL_RenderClear(renderer);
 
     ball.Render();
-    brick.Render();
+    for (auto brick : bricks) {
+        brick.Render();
+    }
     SDL_RenderPresent(renderer);
     SDL_Delay(1000 / 240);
 }
@@ -73,5 +84,20 @@ void Controller::Render(Ball &ball, Brick &brick) {
 void Controller::EventHandler(SDL_Event *event) {
     if (event->type == SDL_QUIT) {
         running = false;
+    }
+}
+
+
+
+void Controller::LoadTextures() {
+    FUNC_CALL(LoadTextures());
+    textureMap.AddTexture(renderer, "ball", "ball.bmp");
+    textureMap.AddTexture(renderer, "brick", "brick.bmp");
+    ball = Ball(window, textureMap.GetID("ball"));
+    int width = textureMap.GetID("brick")->GetWidth();
+    bricks = {};
+    for (int i = 0; i < 5; ++i) {
+        bricks.emplace_back(textureMap.GetID("brick"));
+        bricks.back().SetPosition(10 + i * (width + 10), 50);
     }
 }

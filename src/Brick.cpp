@@ -4,12 +4,33 @@
 
 #include "Brick.h"
 
-Brick::Brick(Texture *texture) : texture(texture), xPos(0), yPos(0) {}
+Brick::Brick(Texture *texture)
+    : texture(texture), xPos(0), yPos(0), destroyed(false) {}
+
+Brick::~Brick() {
+    std::cout << "~Brick() at: " << xPos << " " << yPos << std::endl;
+}
 
 void Brick::SetPosition(int x, int y) {
     xPos = x;
     yPos = y;
-    position = {xPos, yPos, texture->GetWidth(), texture->GetHeight()};
+    bound_box = {xPos, yPos, texture->GetWidth(), texture->GetHeight()};
+    // use the .w & .h members to indicate the right and bottom edges so we
+    // don't have to compute in the collision routines every time
+    edges = {xPos, yPos, xPos + texture->GetWidth(),
+             yPos + texture->GetHeight()};
 }
 
-void Brick::Render() { texture->Render(position); }
+void Brick::Render() {
+    if (!destroyed) {
+        texture->Render(bound_box);
+    }
+}
+
+SDL_Rect Brick::getEdges() const { return edges; }
+const SDL_Rect &Brick::getBounds() { return bound_box; }
+bool Brick::isDestroyed() const { return destroyed; }
+
+void Brick::setDestroyed(bool flag) {
+    destroyed = flag;
+}
