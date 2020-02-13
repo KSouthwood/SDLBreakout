@@ -4,19 +4,17 @@
 
 #include "Controller.h"
 
-#define FUNC_CALL(func_name) std::cout << "********** " << #func_name << " **********\n"
-
 Controller::Controller() : running(true) {
-    FUNC_CALL(Controller());
+    FUNC_CALL('Controller()');
 }
 
 bool Controller::OnInit() {
-    FUNC_CALL(OnInit());
+    FUNC_CALL('OnInit()');
     bool success = false;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == 0) {
-        window = SDL_CreateWindow("Breakout", SDL_WINDOWPOS_CENTERED,
-                                  SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH,
+        window = SDL_CreateWindow("Breakout", SDL_WINDOWPOS_CENTERED, // NOLINT(hicpp-signed-bitwise)
+                                  SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, // NOLINT(hicpp-signed-bitwise)
                                   WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
         if (window != nullptr) {
@@ -32,7 +30,7 @@ bool Controller::OnInit() {
 }
 
 void Controller::CleanUp() {
-    FUNC_CALL(CleanUp());
+    FUNC_CALL('CleanUp()');
     textureMap.Cleanup();
 
     if (renderer != nullptr) {
@@ -76,7 +74,7 @@ void Controller::Loop() {
 }
 
 void Controller::Render() {
-    FUNC_CALL(Render());
+//    FUNC_CALL(Render());
     SDL_Color background = {0x00, 0x00, 0xff, 0xFF};
     SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b,
                            background.a);
@@ -104,15 +102,18 @@ void Controller::EventHandler(SDL_Event *event) {
 
 
 void Controller::LoadTextures() {
-    FUNC_CALL(LoadTextures());
+    FUNC_CALL('LoadTextures()');
     textureMap.AddTexture(renderer, "ball", "ball.bmp");
     textureMap.AddTexture(renderer, "brick", "brick.bmp");
     ball = Ball(window, textureMap.GetID("ball"));
     int width = textureMap.GetID("brick")->GetWidth();
+    int height = textureMap.GetID("brick")->GetHeight();
     bricks = {};
-    for (int i = 0; i < 5; ++i) {
-        bricks.emplace_back(textureMap.GetID("brick"));
-        bricks.back().SetPosition(10 + i * (width + 10), 50);
+    for (int row = 0; row < 6; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            bricks.emplace_back(textureMap.GetID("brick"));
+            bricks.back().SetPosition(col * width, 50 + (row * height));
+        }
     }
     paddle = Paddle(window, renderer);
 }

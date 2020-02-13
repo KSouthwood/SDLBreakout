@@ -13,6 +13,8 @@
 #include "Paddle.h"
 #include "TextureMap.h"
 
+#define FUNC_CALL(func_name) std::cout << "********** " << #func_name << " **********\n"
+
 class Controller {
   public:
     Controller();
@@ -36,7 +38,7 @@ class Controller {
 
     void Render();
     void EventHandler(SDL_Event *event);
-    bool CollisionCheck(Brick ccBrick);
+    bool CollisionCheck(const Brick& ccBrick);
     void BounceBall(Brick &bBrick);
     void LoadTextures();
 };

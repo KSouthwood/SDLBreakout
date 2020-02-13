@@ -8,7 +8,7 @@ Brick::Brick(Texture *texture)
     : texture(texture), xPos(0), yPos(0), destroyed(false) {}
 
 Brick::~Brick() {
-    std::cout << "~Brick() at: " << xPos << " " << yPos << std::endl;
+//    std::cout << "~Brick() at: " << xPos << " " << yPos << std::endl;
 }
 
 void Brick::SetPosition(int x, int y) {

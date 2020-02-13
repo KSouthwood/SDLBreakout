@@ -3,7 +3,7 @@
 //
 #include "Controller.h"
 
-bool Controller::CollisionCheck(Brick ccBrick) {
+bool Controller::CollisionCheck(const Brick& ccBrick) {
     if (ccBrick.isDestroyed()) {
         return false;
     }
@@ -34,6 +34,7 @@ bool Controller::CollisionCheck(Brick ccBrick) {
 }
 
 void Controller::BounceBall(Brick &bBrick) {
+    FUNC_CALL(BounceBall());
     SDL_Rect ballPos = ball.getPosition();
     SDL_Rect brickPos = bBrick.getEdges();
 

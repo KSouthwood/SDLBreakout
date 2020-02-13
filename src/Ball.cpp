@@ -4,8 +4,10 @@
 
 #include "Ball.h"
 
+Ball::Ball() = default;
+
 Ball::Ball(SDL_Window *window, Texture *texture)
-    : texture(texture), position({0, 0, 0, 0}), xMax(0), yMax(0) {
+    : texture(texture), bound_box({0, 0, 0, 0}), xMax(0), yMax(0) {
     SDL_GetWindowSize(window, &xMax, &yMax);
     int width = texture->GetWidth();
     int height = texture->GetHeight();
@@ -15,10 +17,10 @@ Ball::Ball(SDL_Window *window, Texture *texture)
     yDir = LEFT;
     xMax -= width;
     yMax -= height;
-    position = {xPos, yPos, width, height};
+    bound_box = {xPos, yPos, width, height};
 }
 
-Ball::~Ball() {}
+Ball::~Ball() = default;
 
 void Ball::Move() {
     xPos += xDir;
@@ -44,16 +46,15 @@ void Ball::Move() {
         yPos = yMax;
     }
 
-    position.x = xPos;
-    position.y = yPos;
+    bound_box.x = xPos;
+    bound_box.y = yPos;
 }
 
-void Ball::Render() { texture->Render(position); }
+void Ball::Render() { texture->Render(bound_box); }
 const SDL_Rect &Ball::getPosition() const { return bound_box; }
 
 void Ball::FlipXDir() { Ball::xDir = Ball::xDir == RIGHT ? LEFT : RIGHT; }
 void Ball::FlipYDir() { Ball::yDir = Ball::yDir == UP ? DOWN : UP; }
 
-int Ball::getXPos() const { return xPos; }
 int Ball::getYPos() const { return yPos; }
 int Ball::getYDir() const { return yDir; }
