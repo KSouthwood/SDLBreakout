@@ -56,13 +56,22 @@ void Controller::Loop() {
         }
 
         ball.Move();
-        Render();
-        for (auto brick = bricks.begin(); brick != bricks.end(); ++brick) {
-            if (CollisionCheck(*brick)) {
-                BounceBall(*brick);
-                brick->setDestroyed(true);
+        for (auto & brick : bricks) {
+            if (CollisionCheck(brick)) {
+                BounceBall(brick);
+                brick.setDestroyed(true);
             }
         }
+
+        if (SDL_HasIntersection(&ball.getPosition(), &paddle.getPaddle())) {
+            if (ball.getYPos() < paddle.getPaddle().y - ball.getPosition().h + 3) {
+                if (ball.getYDir() == 1) {
+                    ball.FlipYDir();
+                }
+            }
+        }
+
+        Render();
     }
 }
 
@@ -77,6 +86,7 @@ void Controller::Render() {
     for (auto brick : bricks) {
         brick.Render();
     }
+    paddle.Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(1000 / 240);
 }
@@ -84,6 +94,10 @@ void Controller::Render() {
 void Controller::EventHandler(SDL_Event *event) {
     if (event->type == SDL_QUIT) {
         running = false;
+    }
+
+    if (event->type == SDL_MOUSEMOTION) {
+        paddle.Move(event->motion.x);
     }
 }
 
@@ -100,4 +114,5 @@ void Controller::LoadTextures() {
         bricks.emplace_back(textureMap.GetID("brick"));
         bricks.back().SetPosition(10 + i * (width + 10), 50);
     }
+    paddle = Paddle(window, renderer);
 }

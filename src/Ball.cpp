@@ -56,3 +56,4 @@ void Ball::FlipYDir() { Ball::yDir = Ball::yDir == UP ? DOWN : UP; }
 
 int Ball::getXPos() const { return xPos; }
 int Ball::getYPos() const { return yPos; }
+int Ball::getYDir() const { return yDir; }

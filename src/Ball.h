@@ -22,6 +22,7 @@ class Ball {
     int getYPos() const;
     void FlipXDir();
     void FlipYDir();
+    int getYDir() const;
 
   private:
     Texture *texture;

@@ -10,6 +10,7 @@
 
 #include "Ball.h"
 #include "Brick.h"
+#include "Paddle.h"
 #include "TextureMap.h"
 
 class Controller {
@@ -28,6 +29,7 @@ class Controller {
     TextureMap textureMap;
     Ball ball;
     std::list<Brick> bricks;
+    Paddle paddle;
 
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;
