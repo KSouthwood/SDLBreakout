@@ -12,6 +12,7 @@
 #include "Brick.h"
 #include "Paddle.h"
 #include "TextureMap.h"
+#include "FPS.h"
 
 #define FUNC_CALL(func_name) std::cout << "********** " << #func_name << " **********\n"
 

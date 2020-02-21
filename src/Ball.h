@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "Texture.h"
+#include "FPS.h"
 
 class Ball {
   public:
@@ -28,8 +29,8 @@ class Ball {
     Texture *texture{};
     SDL_Rect bound_box{};
 
-    int xPos{};
-    int yPos{};
+    float xPos{};
+    float yPos{};
     int xDir{};
     int yDir{};
     int xMax{};

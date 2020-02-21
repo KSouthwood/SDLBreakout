@@ -47,8 +47,10 @@ void Controller::CleanUp() {
 void Controller::Loop() {
     LoadTextures();
     SDL_Event event;
+    int title_timestamp = SDL_GetTicks();
 
     while (running) {
+
         while (SDL_PollEvent(&event)) {
             EventHandler(&event);
         }
@@ -70,6 +72,14 @@ void Controller::Loop() {
         }
 
         Render();
+        FPS::FPSControl.onLoop();
+
+        if (title_timestamp + 1000 < SDL_GetTicks()) {
+            std::string title =
+                "Breakout     FPS: " + std::to_string(FPS::FPSControl.getFPS()) + " Speed: " + std::to_string(FPS::FPSControl.getSpeed());
+            SDL_SetWindowTitle(window, title.c_str());
+            title_timestamp = SDL_GetTicks();
+        }
     }
 }
 
@@ -86,7 +96,6 @@ void Controller::Render() {
     }
     paddle.Render();
     SDL_RenderPresent(renderer);
-    SDL_Delay(1000 / 240);
 }
 
 void Controller::EventHandler(SDL_Event *event) {
