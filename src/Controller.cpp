@@ -84,7 +84,6 @@ void Controller::Loop() {
 }
 
 void Controller::Render() {
-//    FUNC_CALL(Render());
     SDL_Color background = {0x00, 0x00, 0xff, 0xFF};
     SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b,
                            background.a);
@@ -127,8 +126,6 @@ void Controller::EventHandler(SDL_Event *event) {
 
     }
 }
-
-
 
 void Controller::LoadTextures() {
     FUNC_CALL('LoadTextures()');

@@ -7,9 +7,7 @@
 Brick::Brick(Texture *texture)
     : texture(texture), xPos(0), yPos(0), destroyed(false) {}
 
-Brick::~Brick() {
-//    std::cout << "~Brick() at: " << xPos << " " << yPos << std::endl;
-}
+Brick::~Brick() {}
 
 void Brick::SetPosition(int x, int y) {
     xPos = x;
@@ -28,7 +26,9 @@ void Brick::Render() {
 }
 
 SDL_Rect Brick::getEdges() const { return edges; }
+
 const SDL_Rect &Brick::getBounds() { return bound_box; }
+
 bool Brick::isDestroyed() const { return destroyed; }
 
 void Brick::setDestroyed(bool flag) {

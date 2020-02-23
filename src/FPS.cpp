@@ -12,6 +12,7 @@ FPS::FPS() {
     frames = 0;
     speed = 0.0f;
 }
+
 void FPS::onLoop() {
     if (timestamp + MS_SECOND < SDL_GetTicks()) {
         timestamp = SDL_GetTicks();
@@ -19,7 +20,7 @@ void FPS::onLoop() {
         frames = 0;
     }
 
-    speed = ((SDL_GetTicks() - (float)frame_end) / (float)MS_SECOND) * SPEED_FACTOR;
+    speed = (static_cast<float>(SDL_GetTicks() - frame_end) / static_cast<float>(MS_SECOND)) * SPEED_FACTOR;
     frame_end = SDL_GetTicks();
     ++frames;
 
@@ -27,5 +28,7 @@ void FPS::onLoop() {
         SDL_Delay((MS_SECOND / FPS_MAX) - (SDL_GetTicks() - frame_end));
     }
 }
+
 float FPS::getSpeed() { return speed; }
+
 int FPS::getFPS() { return frame_rate; }

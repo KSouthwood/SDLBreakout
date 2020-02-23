@@ -22,7 +22,7 @@ class Paddle {
     const SDL_Rect &getPaddle() const;
 
   private:
-    SDL_Renderer *rend;
+    SDL_Renderer *rend = nullptr;
 
     SDL_Color COLOR = {0x99, 0x66, 0xff, 0xff};
     SDL_Rect PADDLE = {0, 0,75, 15};

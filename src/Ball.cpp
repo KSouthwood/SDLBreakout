@@ -11,29 +11,29 @@ Ball::Ball(SDL_Window *window, Texture *texture)
     SDL_GetWindowSize(window, &xMax, &yMax);
     int width = texture->GetWidth();
     int height = texture->GetHeight();
-    xPos = (float)xMax / 2.0f;
-    yPos = (float)yMax - 50.0f;
+    xPos = static_cast<float>(xMax) / 2.0f;
+    yPos = static_cast<float>(yMax) - 50.0f;
     xDir = UP;
     yDir = LEFT;
     xMax -= width;
     yMax -= height;
-    bound_box = {(int)xPos, (int)yPos, width, height};
+    bound_box = {static_cast<int>(xPos), static_cast<int>(yPos), width, height};
 }
 
 Ball::~Ball() = default;
 
 void Ball::Move() {
-    xPos += (float)xDir * FPS::FPSControl.getSpeed();
-    yPos += (float)yDir * FPS::FPSControl.getSpeed();
+    xPos += static_cast<float>(xDir) * FPS::FPSControl.getSpeed();
+    yPos += static_cast<float>(yDir) * FPS::FPSControl.getSpeed();
 
     if (xPos <= 0.0f) {
         xDir = RIGHT;
         xPos = 0.0f;
     }
 
-    if (xPos >= (float)xMax) {
+    if (xPos >= static_cast<float>(xMax)) {
         xDir = LEFT;
-        xPos = (float)xMax;
+        xPos = static_cast<float>(xMax);
     }
 
     if (yPos <= 0) {
@@ -41,13 +41,13 @@ void Ball::Move() {
         yPos = 0;
     }
 
-    if (yPos >= (float)yMax) {
+    if (yPos >= static_cast<float>(yMax)) {
         yDir = UP;
-        yPos = (float)yMax;
+        yPos = static_cast<float>(yMax);
     }
 
-    bound_box.x = (int)xPos;
-    bound_box.y = (int)yPos;
+    bound_box.x = static_cast<int>(xPos);
+    bound_box.y = static_cast<int>(yPos);
 }
 
 void Ball::Render() { texture->Render(bound_box); }
@@ -56,5 +56,5 @@ const SDL_Rect &Ball::getPosition() const { return bound_box; }
 void Ball::FlipXDir() { Ball::xDir = Ball::xDir == RIGHT ? LEFT : RIGHT; }
 void Ball::FlipYDir() { Ball::yDir = Ball::yDir == UP ? DOWN : UP; }
 
-int Ball::getYPos() const { return (int)yPos; }
+int Ball::getYPos() const { return static_cast<int>(yPos); }
 int Ball::getYDir() const { return yDir; }

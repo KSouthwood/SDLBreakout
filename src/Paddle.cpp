@@ -4,7 +4,7 @@
 
 #include "Paddle.h"
 
-Paddle::Paddle() {}
+Paddle::Paddle() = default;
 
 Paddle::Paddle(SDL_Window *window, SDL_Renderer *renderer) : rend(renderer) {
     int win_wid = 0;
@@ -26,7 +26,7 @@ void Paddle::Move(Sint32 new_pos) {
 }
 
 void Paddle::KeyMove(int move) {
-    Move(PADDLE.x + (move * FPS::FPSControl.getSpeed()));
+    Move(static_cast<float>(PADDLE.x) + (static_cast<float>(move) * FPS::FPSControl.getSpeed()));
 }
 
 void Paddle::Render() {
