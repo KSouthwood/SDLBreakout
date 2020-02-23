@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include "FPS.h"
 
 class Paddle {
   public:
@@ -15,6 +16,8 @@ class Paddle {
     ~Paddle();
 
     void Move(Sint32 new_pos);
+    void KeyMove(int move);
+
     void Render();
     const SDL_Rect &getPaddle() const;
 

@@ -98,6 +98,8 @@ void Controller::Render() {
     SDL_RenderPresent(renderer);
 }
 
+//TODO: Use switch(event->type) structure instead of if's??
+//      Shouldn't be a problem to nest switches
 void Controller::EventHandler(SDL_Event *event) {
     if (event->type == SDL_QUIT) {
         running = false;
@@ -105,6 +107,24 @@ void Controller::EventHandler(SDL_Event *event) {
 
     if (event->type == SDL_MOUSEMOTION) {
         paddle.Move(event->motion.x);
+    }
+
+    if (event->type == SDL_KEYDOWN) {
+        switch (event->key.keysym.sym) {
+        case SDLK_LEFT:
+            paddle.KeyMove(-8);
+            break;
+        case SDLK_RIGHT:
+            paddle.KeyMove(8);
+            break;
+        case SDLK_q:
+            running = false;
+            break;
+        default:
+            break;
+        }
+
+
     }
 }
 

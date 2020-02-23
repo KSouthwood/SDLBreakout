@@ -19,7 +19,7 @@ class FPS {
   private:
     int FPS_MAX = 120;
     int MS_SECOND = 1000;
-    float SPEED_FACTOR = 60.0;
+    float SPEED_FACTOR = 175.0;
 
     int timestamp;
     int frame_end;

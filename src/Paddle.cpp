@@ -25,6 +25,10 @@ void Paddle::Move(Sint32 new_pos) {
     PADDLE.x = new_pos;
 }
 
+void Paddle::KeyMove(int move) {
+    Move(PADDLE.x + (move * FPS::FPSControl.getSpeed()));
+}
+
 void Paddle::Render() {
     boxRGBA(rend, PADDLE.x, PADDLE.y, PADDLE.x + PADDLE.w, PADDLE.y + PADDLE.h, COLOR.r, COLOR.g,
             COLOR.b, COLOR.a);
