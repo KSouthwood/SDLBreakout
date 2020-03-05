@@ -30,9 +30,8 @@ class Controller {
     bool running;
 
     TextureMap textureMap;
-    Ball ball;
+    Ball ball = Ball::ball;
     std::list<Brick> bricks;
-    Paddle paddle;
 
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;

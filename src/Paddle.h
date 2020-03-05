@@ -11,21 +11,23 @@
 
 class Paddle {
   public:
+    static Paddle paddle;
+
     Paddle();
-    Paddle(SDL_Window *window, SDL_Renderer *renderer);
     ~Paddle();
 
+    void CreatePaddle(SDL_Window *window, SDL_Renderer *renderer);
     void Move(Sint32 new_pos);
     void KeyMove(int move);
 
     void Render();
-    const SDL_Rect &getPaddle() const;
+    const SDL_Rect &getPosition() const;
 
   private:
     SDL_Renderer *rend = nullptr;
 
     SDL_Color COLOR = {0x99, 0x66, 0xff, 0xff};
-    SDL_Rect PADDLE = {0, 0,75, 15};
+    SDL_Rect position = {0, 0,75, 15};
 
     int xMax = 0;
 };

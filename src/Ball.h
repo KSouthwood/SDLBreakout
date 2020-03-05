@@ -10,9 +10,12 @@
 
 #include "Texture.h"
 #include "FPS.h"
+#include "Paddle.h"
 
 class Ball {
   public:
+    static Ball ball;
+
     Ball(SDL_Window *window, Texture *texture);
     Ball();
     ~Ball();
@@ -24,6 +27,7 @@ class Ball {
     void FlipXDir();
     void FlipYDir();
     int getYDir() const;
+    void LaunchBall();
 
   private:
     Texture *texture{};
@@ -35,6 +39,8 @@ class Ball {
     int yDir{};
     int xMax{};
     int yMax{};
+
+    bool onPaddle {true};
 
     enum DIRECTIONS { UP = -1, DOWN = 1, LEFT = -1, RIGHT = 1 };
 };

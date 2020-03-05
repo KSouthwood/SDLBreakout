@@ -63,8 +63,9 @@ void Controller::Loop() {
             }
         }
 
-        if (SDL_HasIntersection(&ball.getPosition(), &paddle.getPaddle())) {
-            if (ball.getYPos() < paddle.getPaddle().y - ball.getPosition().h + 3) {
+        if (SDL_HasIntersection(&ball.getPosition(), &Paddle::paddle.getPosition())) {
+            if (ball.getYPos() <
+                Paddle::paddle.getPosition().y - ball.getPosition().h + 3) {
                 if (ball.getYDir() == 1) {
                     ball.FlipYDir();
                 }
@@ -93,7 +94,7 @@ void Controller::Render() {
     for (auto brick : bricks) {
         brick.Render();
     }
-    paddle.Render();
+    Paddle::paddle.Render();
     SDL_RenderPresent(renderer);
 }
 
@@ -105,19 +106,26 @@ void Controller::EventHandler(SDL_Event *event) {
     }
 
     if (event->type == SDL_MOUSEMOTION) {
-        paddle.Move(event->motion.x);
+        Paddle::paddle.Move(event->motion.x);
+    }
+
+    if (event->type == SDL_MOUSEBUTTONDOWN) {
+        ball.LaunchBall();
     }
 
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
         case SDLK_LEFT:
-            paddle.KeyMove(-8);
+            Paddle::paddle.KeyMove(-8);
             break;
         case SDLK_RIGHT:
-            paddle.KeyMove(8);
+            Paddle::paddle.KeyMove(8);
             break;
         case SDLK_q:
             running = false;
+            break;
+        case SDLK_SPACE:
+            ball.LaunchBall();
             break;
         default:
             break;
@@ -129,6 +137,7 @@ void Controller::EventHandler(SDL_Event *event) {
 
 void Controller::LoadTextures() {
     FUNC_CALL('LoadTextures()');
+    Paddle::paddle.CreatePaddle(window, renderer);
     textureMap.AddTexture(renderer, "ball", "ball.bmp");
     textureMap.AddTexture(renderer, "brick", "brick.bmp");
     ball = Ball(window, textureMap.GetID("ball"));
@@ -141,5 +150,4 @@ void Controller::LoadTextures() {
             bricks.back().SetPosition(col * width, 50 + (row * height));
         }
     }
-    paddle = Paddle(window, renderer);
 }

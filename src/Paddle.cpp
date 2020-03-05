@@ -4,33 +4,36 @@
 
 #include "Paddle.h"
 
+Paddle Paddle::paddle;
+
 Paddle::Paddle() = default;
 
-Paddle::Paddle(SDL_Window *window, SDL_Renderer *renderer) : rend(renderer) {
+Paddle::~Paddle() = default;
+
+void Paddle::CreatePaddle(SDL_Window *window, SDL_Renderer *renderer) {
+    rend = renderer;
     int win_wid = 0;
     int win_hgt = 0;
 
     SDL_GetWindowSize(window, &win_wid, &win_hgt);
-    PADDLE.x = (win_wid / 2) - (PADDLE.w / 2);
-    PADDLE.y = win_hgt - 50;
-    xMax = win_wid - PADDLE.w;
+    position.x = (win_wid / 2) - (position.w / 2);
+    position.y = win_hgt - 30;
+    xMax = win_wid - position.w;
 }
-
-Paddle::~Paddle() = default;
 
 void Paddle::Move(Sint32 new_pos) {
     // validate new_pos to be between window edges
     new_pos = new_pos < 0 ? 0 : new_pos;
     new_pos = new_pos > xMax ? xMax : new_pos;
-    PADDLE.x = new_pos;
+    position.x = new_pos;
 }
 
 void Paddle::KeyMove(int move) {
-    Move(static_cast<float>(PADDLE.x) + (static_cast<float>(move) * FPS::FPSControl.getSpeed()));
+    Move(static_cast<float>(position.x) + (static_cast<float>(move) * FPS::FPSControl.getSpeed()));
 }
-
 void Paddle::Render() {
-    boxRGBA(rend, PADDLE.x, PADDLE.y, PADDLE.x + PADDLE.w, PADDLE.y + PADDLE.h, COLOR.r, COLOR.g,
+    boxRGBA(rend, position.x, position.y, position.x + position.w,
+            position.y + position.h, COLOR.r, COLOR.g,
             COLOR.b, COLOR.a);
 }
-const SDL_Rect &Paddle::getPaddle() const { return PADDLE; }
+const SDL_Rect &Paddle::getPosition() const { return position; }
