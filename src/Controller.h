@@ -41,6 +41,7 @@ class Controller {
     bool CollisionCheck(const Brick& ccBrick);
     void BounceBall(Brick &bBrick);
     void LoadTextures();
+    void PaddleCollision();
 };
 
 #endif // BREAKOUT_CONTROLLER_H

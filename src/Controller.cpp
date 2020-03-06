@@ -64,22 +64,17 @@ void Controller::Loop() {
         }
 
         if (SDL_HasIntersection(&ball.getPosition(), &Paddle::paddle.getPosition())) {
-            if (ball.getYPos() <
-                Paddle::paddle.getPosition().y - ball.getPosition().h + 3) {
-                if (ball.getYDir() == 1) {
-                    ball.FlipYDir();
-                }
-            }
+            PaddleCollision();
         }
 
         Render();
         FPS::FPSControl.onLoop();
 
-        if (title_timestamp + 1000 < SDL_GetTicks()) {
+        if (title_timestamp + 1000 <= SDL_GetTicks()) {
+            title_timestamp = SDL_GetTicks();
             std::string title =
                 "Breakout     FPS: " + std::to_string(FPS::FPSControl.getFPS()) + " Speed: " + std::to_string(FPS::FPSControl.getSpeed());
             SDL_SetWindowTitle(window, title.c_str());
-            title_timestamp = SDL_GetTicks();
         }
     }
 }
@@ -96,43 +91,6 @@ void Controller::Render() {
     }
     Paddle::paddle.Render();
     SDL_RenderPresent(renderer);
-}
-
-//TODO: Use switch(event->type) structure instead of if's??
-//      Shouldn't be a problem to nest switches
-void Controller::EventHandler(SDL_Event *event) {
-    if (event->type == SDL_QUIT) {
-        running = false;
-    }
-
-    if (event->type == SDL_MOUSEMOTION) {
-        Paddle::paddle.Move(event->motion.x);
-    }
-
-    if (event->type == SDL_MOUSEBUTTONDOWN) {
-        ball.LaunchBall();
-    }
-
-    if (event->type == SDL_KEYDOWN) {
-        switch (event->key.keysym.sym) {
-        case SDLK_LEFT:
-            Paddle::paddle.KeyMove(-8);
-            break;
-        case SDLK_RIGHT:
-            Paddle::paddle.KeyMove(8);
-            break;
-        case SDLK_q:
-            running = false;
-            break;
-        case SDLK_SPACE:
-            ball.LaunchBall();
-            break;
-        default:
-            break;
-        }
-
-
-    }
 }
 
 void Controller::LoadTextures() {

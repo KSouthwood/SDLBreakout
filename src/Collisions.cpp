@@ -69,3 +69,21 @@ void Controller::BounceBall(Brick &bBrick) {
         std::cout << "ballR >= brickR, flipX" << std::endl;
     }
 }
+
+void Controller::PaddleCollision() {
+    const SDL_Rect ball_pos = ball.getPosition();
+    const SDL_Rect padd_pos = Paddle::paddle.getPosition();
+
+    if (ball_pos.y <
+        padd_pos.y - ball_pos.h + 3) {
+        if (ball.getYDir() == Ball::DIR_DOWN) {
+            ball.FlipYDir();
+        }
+
+        if (ball_pos.x < padd_pos.x + padd_pos.w / 2) {
+            if (ball.getXDir() > 0.0f) { ball.FlipXDir(); }
+        } else {
+            if (ball.getXDir() < 0.0f) { ball.FlipXDir(); }
+        }
+    }
+}

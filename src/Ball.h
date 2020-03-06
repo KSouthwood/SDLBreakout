@@ -23,26 +23,29 @@ class Ball {
     void Move();
     void Render();
     const SDL_Rect &getPosition() const;
-    int getYPos() const;
     void FlipXDir();
     void FlipYDir();
-    int getYDir() const;
-    void LaunchBall();
+    float getYDir() const;
+    void LaunchBall(float dir);
+    float getXDir() const;
+
+    constexpr static const float DIR_UP = -1.0f;
+    constexpr static const float DIR_DOWN = 1.0f;
+    constexpr static const float DIR_LEFT = -1.0f;
+    constexpr static const float DIR_RIGHT = 1.0f;
 
   private:
     Texture *texture{};
-    SDL_Rect bound_box{};
 
+    SDL_Rect bound_box{};
     float xPos{};
     float yPos{};
-    int xDir{};
-    int yDir{};
+    float xDir{};
+    float yDir{};
     int xMax{};
     int yMax{};
 
     bool onPaddle {true};
-
-    enum DIRECTIONS { UP = -1, DOWN = 1, LEFT = -1, RIGHT = 1 };
 };
 
 #endif // BREAKOUT_BALL_H

@@ -17,8 +17,8 @@ class FPS {
     int getFPS();
 
   private:
-    int FPS_MAX = 120;
-    int MS_SECOND = 1000;
+    unsigned int FPS_MAX = 120;
+    unsigned int MS_SECOND = 1000;
     float SPEED_FACTOR = 175.0;
 
     int timestamp;

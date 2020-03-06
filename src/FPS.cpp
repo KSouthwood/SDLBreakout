@@ -24,8 +24,10 @@ void FPS::onLoop() {
     frame_end = SDL_GetTicks();
     ++frames;
 
-    if ((SDL_GetTicks() - frame_end) < (MS_SECOND / FPS_MAX)) {
-        SDL_Delay((MS_SECOND / FPS_MAX) - (SDL_GetTicks() - frame_end));
+    if (FPS_MAX) {
+        if ((SDL_GetTicks() - frame_end) < (MS_SECOND / FPS_MAX)) {
+            SDL_Delay((MS_SECOND / FPS_MAX) - (SDL_GetTicks() - frame_end));
+        }
     }
 }
 

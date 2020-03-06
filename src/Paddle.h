@@ -17,7 +17,7 @@ class Paddle {
     ~Paddle();
 
     void CreatePaddle(SDL_Window *window, SDL_Renderer *renderer);
-    void Move(Sint32 new_pos);
+    void MouseMove(Sint32 new_pos);
     void KeyMove(int move);
 
     void Render();
