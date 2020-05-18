@@ -5,29 +5,30 @@
 #ifndef BREAKOUT_PADDLE_H
 #define BREAKOUT_PADDLE_H
 
+#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "FPS.h"
 
 class Paddle {
   public:
-    static Paddle paddle;
-
     Paddle();
     ~Paddle();
 
-    void CreatePaddle(SDL_Window *window, SDL_Renderer *renderer);
+    void CreatePaddle(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
     void MouseMove(Sint32 new_pos);
     void KeyMove(int move);
 
     void Render();
-    const SDL_Rect &getPosition() const;
+    const SDL_Rect &getPosition();
 
   private:
-    SDL_Renderer *rend = nullptr;
+    int WIDTH = 75;
+    int HEIGHT = 15;
+    SDL_Renderer *renderer = nullptr;
 
     SDL_Color COLOR = {0x99, 0x66, 0xff, 0xff};
-    SDL_Rect position = {0, 0,75, 15};
+    SDL_Rect position = {0, 0,WIDTH, HEIGHT};
 
     int xMax = 0;
 };

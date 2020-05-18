@@ -4,61 +4,65 @@
 
 #include "Ball.h"
 
-Ball Ball::ball;
-
-Ball::Ball() = default;
-
-Ball::Ball(SDL_Window *window, Texture *texture)
-    : texture(texture), bound_box({0, 0, 0, 0}), xMax(0), yMax(0) {
-    SDL_GetWindowSize(window, &xMax, &yMax);
-    int width = texture->GetWidth();
-    int height = texture->GetHeight();
-    xPos = static_cast<float>(xMax) / 2.0f;
-    yPos = static_cast<float>(yMax) - 50.0f;
-    xDir = DIR_UP;
-    yDir = DIR_LEFT;
-    xMax -= width;
-    yMax -= height;
-    bound_box = {static_cast<int>(xPos), static_cast<int>(yPos), width, height};
+Ball::Ball() {
+    std::cout << "********** Ball() **********\n";
 }
 
-Ball::~Ball() = default;
+Ball::~Ball() {
+    std::cout << "********** ~Ball() **********\n";
+}
 
-void Ball::Move() {
+void Ball::CreateBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+    int win_x = 0;
+    int win_y = 0;
+    SDL_GetWindowSize(sdlWindow, &win_x, &win_y);
+    this->renderer = sdlRenderer;
+    position.x = static_cast<float>(win_x) / 2.0f;
+    position.y = static_cast<float>(win_y) - 50.0f;
+    xMax = static_cast<float>(win_x) - this->RADIUS;
+    yMax = static_cast<float>(win_y) - this->RADIUS;
+    bound_box.x = static_cast<int>(position.x);
+    bound_box.y = static_cast<int>(position.y);
+}
+
+void Ball::Move(Paddle &paddle) {
     if (onPaddle) {
-        SDL_Rect pos = Paddle::paddle.getPosition();
-        xPos = static_cast<float>(pos.x + (pos.w / 2) - (bound_box.w / 2));
-        yPos = static_cast<float>(pos.y - bound_box.h);
+        SDL_Rect pos = paddle.getPosition();
+        position.x = static_cast<float>(pos.x) + (static_cast<float>(pos.w) / 2.0f);
+        position.y = static_cast<float>(pos.y) - RADIUS;
     } else {
-        xPos += xDir * FPS::FPSControl.getSpeed();
-        yPos += yDir * FPS::FPSControl.getSpeed();
+        position.x += xDir * FPS::FPSControl.getSpeed();
+        position.y += yDir * FPS::FPSControl.getSpeed();
 
-        if (xPos <= 0.0f) {
+        if (position.x <= RADIUS) {
             FlipXDir();
-            xPos = 0.0f;
+            position.x = RADIUS;
         }
 
-        if (xPos >= static_cast<float>(xMax)) {
+        if (position.x >= xMax) {
             FlipXDir();
-            xPos = static_cast<float>(xMax);
+            position.x = xMax;
         }
 
-        if (yPos <= 0) {
+        if (position.y <= RADIUS) {
             FlipYDir();
-            yPos = 0;
+            position.y = RADIUS;
         }
 
-        if (yPos >= static_cast<float>(yMax)) {
-            FlipYDir();
-            yPos = static_cast<float>(yMax);
+        if (position.y >= yMax) {
+            outOfBounds = true;
         }
     }
 
-    bound_box.x = static_cast<int>(xPos);
-    bound_box.y = static_cast<int>(yPos);
+    bound_box.x = static_cast<int>(position.x - RADIUS);
+    bound_box.y = static_cast<int>(position.y - RADIUS);
 }
 
-void Ball::Render() { texture->Render(bound_box); }
+void Ball::Render() {
+    filledCircleRGBA(renderer, position.x, position.y, (bound_box.h / 2),
+                     COLOR.r, COLOR.g, COLOR.b, COLOR.a);
+}
+
 const SDL_Rect &Ball::getPosition() const { return bound_box; }
 
 void Ball::FlipXDir() { xDir *= -1.0f; }
@@ -68,6 +72,8 @@ float Ball::getXDir() const { return xDir; }
 float Ball::getYDir() const { return yDir; }
 
 void Ball::LaunchBall(float dir) {
-    onPaddle = false;
-    xDir = dir;
+    if (onPaddle) {
+        onPaddle = false;
+        xDir     = dir;
+    }
 }

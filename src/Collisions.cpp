@@ -3,15 +3,15 @@
 //
 #include "Controller.h"
 
-bool Controller::CollisionCheck(const Brick& ccBrick) {
+bool Controller::AABBCollisionCheck(const Brick &ccBrick) {
     if (ccBrick.isDestroyed()) {
         return false;
     }
-    SDL_Rect ballPos = ball.getPosition();
+    SDL_Rect ballPos  = ball.getPosition();
     SDL_Rect brickPos = ccBrick.getEdges();
 
-    int ballMin = ballPos.x;
-    int ballMax = ballPos.x + ballPos.w - 1;
+    int ballMin  = ballPos.x;
+    int ballMax  = ballPos.x + ballPos.w - 1;
     int brickMin = brickPos.x;
     int brickMax = brickPos.w;
 
@@ -22,8 +22,8 @@ bool Controller::CollisionCheck(const Brick& ccBrick) {
         return false;
     }
 
-    ballMin = ballPos.y;
-    ballMax = ballPos.y + ballPos.h - 1;
+    ballMin  = ballPos.y;
+    ballMax  = ballPos.y + ballPos.h - 1;
     brickMin = brickPos.y;
     brickMax = brickPos.h;
 
@@ -33,9 +33,46 @@ bool Controller::CollisionCheck(const Brick& ccBrick) {
     return ballMax > ballMin;
 }
 
+bool Controller::CircleCollisionCheck(const Brick &ccBrick) {
+    if (ccBrick.isDestroyed()) {
+        return false;
+    }
+
+    SDL_Rect ballPos  = ball.getPosition();
+    SDL_Rect brickPos = ccBrick.getBounds();
+
+    SDL_Point ballCtr  = {ballPos.x + (ballPos.w / 2),
+                         ballPos.y + (ballPos.h / 2)};
+    SDL_Point brickCtr = {brickPos.x + (brickPos.w / 2),
+                          brickPos.y + (brickPos.h / 2)};
+
+    SDL_Point distance = {abs(ballCtr.x - brickCtr.x),
+                          abs(ballCtr.y - brickCtr.y)};
+
+    // center of circle is too far away on X or Y axis
+    if ((distance.x > (brickPos.w / 2) + (ballPos.w / 2)) ||
+        (distance.y > (brickPos.h / 2) + (ballPos.h / 2))) {
+        return false;
+    }
+
+    if ((distance.x <= (brickPos.w / 2) + (ballPos.w / 2)) ||
+        (distance.y <= (brickPos.h / 2) + (ballPos.h / 2))) {
+        return true;
+    }
+
+    int distance_squared = ((distance.x - (brickPos.w / 2)) ^ 2) +
+                           ((distance.y - (brickPos.h / 2)) ^ 2);
+
+    if (distance_squared <= ((ballPos.w / 2) ^ 2)) {
+        return true;
+    }
+
+    return false;
+}
+
 void Controller::BounceBall(Brick &bBrick) {
     FUNC_CALL(BounceBall());
-    SDL_Rect ballPos = ball.getPosition();
+    SDL_Rect ballPos  = ball.getPosition();
     SDL_Rect brickPos = bBrick.getEdges();
 
     int ballL = ballPos.x;
@@ -72,18 +109,25 @@ void Controller::BounceBall(Brick &bBrick) {
 
 void Controller::PaddleCollision() {
     const SDL_Rect ball_pos = ball.getPosition();
-    const SDL_Rect padd_pos = Paddle::paddle.getPosition();
+    const SDL_Rect padd_pos = paddle.getPosition();
 
-    if (ball_pos.y <
-        padd_pos.y - ball_pos.h + 3) {
+    if (ball_pos.y < padd_pos.y - ball_pos.h + 3) {
         if (ball.getYDir() == Ball::DIR_DOWN) {
             ball.FlipYDir();
         }
 
         if (ball_pos.x < padd_pos.x + padd_pos.w / 2) {
-            if (ball.getXDir() > 0.0f) { ball.FlipXDir(); }
+            if (ball.getXDir() > 0.0f) {
+                ball.FlipXDir();
+            }
         } else {
-            if (ball.getXDir() < 0.0f) { ball.FlipXDir(); }
+            if (ball.getXDir() < 0.0f) {
+                ball.FlipXDir();
+            }
         }
     }
+}
+
+int Controller::Clamp(int value, int min, int max) {
+    return std::max(min, std::min(max, value));
 }

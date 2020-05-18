@@ -11,7 +11,7 @@ void Controller::EventHandler(SDL_Event *event) {
     }
 
     if (event->type == SDL_MOUSEMOTION) {
-        Paddle::paddle.MouseMove(event->motion.x);
+        paddle.MouseMove(event->motion.x);
     }
 
     if (event->type == SDL_MOUSEBUTTONDOWN) {
@@ -27,16 +27,18 @@ void Controller::EventHandler(SDL_Event *event) {
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
         case SDLK_LEFT:
-            Paddle::paddle.KeyMove(-8);
+            paddle.KeyMove(-8);
             break;
         case SDLK_RIGHT:
-            Paddle::paddle.KeyMove(8);
+            paddle.KeyMove(8);
             break;
         case SDLK_q:
             running = false;
             break;
         case SDLK_SPACE:
-            if (Paddle::paddle.getPosition().x < WINDOW_WIDTH / 2) {
+            int width;
+            SDL_GetWindowSize(window, &width, nullptr);
+            if (paddle.getPosition().x < (width / 2)) {
                 ball.LaunchBall(Ball::DIR_LEFT);
             } else {
                 ball.LaunchBall(Ball::DIR_RIGHT);

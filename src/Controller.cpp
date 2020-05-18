@@ -5,32 +5,11 @@
 #include "Controller.h"
 
 Controller::Controller() : running(true) {
-    FUNC_CALL('Controller()');
-}
-
-bool Controller::OnInit() {
-    FUNC_CALL('OnInit()');
-    bool success = false;
-
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == 0) {
-        window = SDL_CreateWindow("Breakout", SDL_WINDOWPOS_CENTERED, // NOLINT(hicpp-signed-bitwise)
-                                  SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, // NOLINT(hicpp-signed-bitwise)
-                                  WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-
-        if (window != nullptr) {
-            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-            if (renderer != nullptr) {
-                success = true;
-            }
-        }
-    }
-
-    return success;
+    FUNC_CALL(Controller());
 }
 
 void Controller::CleanUp() {
-    FUNC_CALL('CleanUp()');
+    FUNC_CALL(CleanUp());
     textureMap.Cleanup();
 
     if (renderer != nullptr) {
@@ -44,7 +23,10 @@ void Controller::CleanUp() {
     SDL_Quit();
 }
 
-void Controller::Loop() {
+void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+    this->window = sdlWindow;
+    this->renderer = sdlRenderer;
+
     LoadTextures();
     SDL_Event event;
     int title_timestamp = SDL_GetTicks();
@@ -55,15 +37,26 @@ void Controller::Loop() {
             EventHandler(&event);
         }
 
-        ball.Move();
+        ball.Move(paddle);
+        if (ball.outOfBounds) {
+            if (--lives == 0) {
+                running = false;
+                break;
+            } else {
+                ball.onPaddle = true;
+                ball.outOfBounds = false;
+            }
+        }
+
         for (auto & brick : bricks) {
-            if (CollisionCheck(brick)) {
+//            if (AABBCollisionCheck(brick)) {
+            if (CircleCollisionCheck(brick)) {
                 BounceBall(brick);
                 brick.setDestroyed(true);
             }
         }
 
-        if (SDL_HasIntersection(&ball.getPosition(), &Paddle::paddle.getPosition())) {
+        if (SDL_HasIntersection(&ball.getPosition(), &paddle.getPosition())) {
             PaddleCollision();
         }
 
@@ -74,7 +67,7 @@ void Controller::Loop() {
             title_timestamp = SDL_GetTicks();
             std::string title =
                 "Breakout     FPS: " + std::to_string(FPS::FPSControl.getFPS()) + " Speed: " + std::to_string(FPS::FPSControl.getSpeed());
-            SDL_SetWindowTitle(window, title.c_str());
+            SDL_SetWindowTitle(sdlWindow, title.c_str());
         }
     }
 }
@@ -89,16 +82,17 @@ void Controller::Render() {
     for (auto brick : bricks) {
         brick.Render();
     }
-    Paddle::paddle.Render();
+    paddle.Render();
     SDL_RenderPresent(renderer);
 }
 
 void Controller::LoadTextures() {
-    FUNC_CALL('LoadTextures()');
-    Paddle::paddle.CreatePaddle(window, renderer);
-    textureMap.AddTexture(renderer, "ball", "ball.bmp");
+    FUNC_CALL(LoadTextures());
+    paddle.CreatePaddle(window, renderer);
+//    textureMap.AddTexture(renderer, "ball", "ball.bmp");
     textureMap.AddTexture(renderer, "brick", "brick.bmp");
-    ball = Ball(window, textureMap.GetID("ball"));
+//    ball = Ball(window, textureMap.GetID("ball"));
+    ball.CreateBall(window, renderer);
     int width = textureMap.GetID("brick")->GetWidth();
     int height = textureMap.GetID("brick")->GetHeight();
     bricks = {};

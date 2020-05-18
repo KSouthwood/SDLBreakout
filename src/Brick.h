@@ -21,7 +21,7 @@ class Brick {
     Brick(Texture *texture);
     void SetPosition(int x, int y);
     void Render();
-    const SDL_Rect &getBounds();
+    SDL_Rect getBounds() const;
     SDL_Rect getEdges() const;
     bool isDestroyed() const;
     void setDestroyed(bool flag);

@@ -19,29 +19,29 @@
 class Controller {
   public:
     Controller();
-    bool OnInit();
     void CleanUp();
-    void Loop();
+    void Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
 
   private:
-    int WINDOW_WIDTH = 480;
-    int WINDOW_HEIGHT = 640;
-
+    int lives = 3;
     bool running;
 
     TextureMap textureMap;
-    Ball ball = Ball::ball;
+    Ball ball = Ball();
     std::list<Brick> bricks;
+    Paddle paddle = Paddle();
 
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;
 
     void Render();
     void EventHandler(SDL_Event *event);
-    bool CollisionCheck(const Brick& ccBrick);
+    bool AABBCollisionCheck(const Brick& ccBrick);
     void BounceBall(Brick &bBrick);
     void LoadTextures();
     void PaddleCollision();
+    int Clamp(int value, int min, int max);
+    bool CircleCollisionCheck(const Brick &ccBrick);
 };
 
 #endif // BREAKOUT_CONTROLLER_H

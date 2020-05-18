@@ -4,29 +4,32 @@
 
 #include "Paddle.h"
 
-Paddle Paddle::paddle;
+Paddle::Paddle() {
+    std::cout << "********** Paddle() **********\n";
+}
 
-Paddle::Paddle() = default;
+Paddle::~Paddle() {
+    std::cout << "********** ~Paddle() **********\n"; //remove #include when deleting
+}
 
-Paddle::~Paddle() = default;
+void Paddle::CreatePaddle(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+    this->renderer = sdlRenderer;
+    int width = 0;
+    int height = 0;
 
-void Paddle::CreatePaddle(SDL_Window *window, SDL_Renderer *renderer) {
-    rend = renderer;
-    int win_wid = 0;
-    int win_hgt = 0;
-
-    SDL_GetWindowSize(window, &win_wid, &win_hgt);
-    position.x = (win_wid / 2) - (position.w / 2);
-    position.y = win_hgt - 30;
-    xMax = win_wid - position.w;
+    SDL_GetWindowSize(sdlWindow, &width, &height);
+    position.x = (width / 2) - (position.w / 2);
+    position.y = height - 30;
+    xMax = width - position.w;
 }
 
 void Paddle::MouseMove(Sint32 new_pos) {
-    // subtract half the paddle size so the middle of the paddle tracks the mouse
+    // subtract half the paddle size so the middle of the paddle tracks the
+    // mouse
     new_pos -= position.w / 2;
-   // validate new_pos to be between window edges
-    new_pos = new_pos < 0 ? 0 : new_pos;
-    new_pos = new_pos > xMax ? xMax : new_pos;
+    // validate new_pos to be between window edges
+    new_pos    = new_pos < 0 ? 0 : new_pos;
+    new_pos    = new_pos > xMax ? xMax : new_pos;
     position.x = new_pos;
 }
 
@@ -36,9 +39,9 @@ void Paddle::KeyMove(int move) {
 }
 
 void Paddle::Render() {
-    boxRGBA(rend, position.x, position.y, position.x + position.w,
-            position.y + position.h, COLOR.r, COLOR.g,
-            COLOR.b, COLOR.a);
+    boxRGBA(renderer,
+            position.x, position.y, position.x + position.w, position.y + position.h,
+            COLOR.r, COLOR.g, COLOR.b, COLOR.a);
 }
 
-const SDL_Rect &Paddle::getPosition() const { return position; }
+const SDL_Rect &Paddle::getPosition() { return position; }

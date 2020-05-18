@@ -14,13 +14,11 @@
 
 class Ball {
   public:
-    static Ball ball;
-
-    Ball(SDL_Window *window, Texture *texture);
+//    Ball(SDL_Window *window, Texture *texture);
     Ball();
     ~Ball();
 
-    void Move();
+    void Move(Paddle &paddle);
     void Render();
     const SDL_Rect &getPosition() const;
     void FlipXDir();
@@ -28,24 +26,29 @@ class Ball {
     float getYDir() const;
     void LaunchBall(float dir);
     float getXDir() const;
+    void CreateBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
 
-    constexpr static const float DIR_UP = -1.0f;
-    constexpr static const float DIR_DOWN = 1.0f;
-    constexpr static const float DIR_LEFT = -1.0f;
-    constexpr static const float DIR_RIGHT = 1.0f;
+    constexpr static float DIR_UP = -1.0f;
+    constexpr static float DIR_DOWN = 1.0f;
+    constexpr static float DIR_LEFT = -1.0f;
+    constexpr static float DIR_RIGHT = 1.0f;
+
+    bool outOfBounds = false;
+    bool onPaddle = true;
 
   private:
-    Texture *texture{};
+    float RADIUS = 10.0;
 
-    SDL_Rect bound_box{};
-    float xPos{};
-    float yPos{};
-    float xDir{};
-    float yDir{};
-    int xMax{};
-    int yMax{};
+    SDL_Color COLOR = {0xdd, 0xdd, 0xdd, 0xff};
+    SDL_Renderer *renderer = nullptr;
+    SDL_Rect bound_box = {0, 0, RADIUS * 2, RADIUS * 2};
+    SDL_FPoint position = {0.0, 0.0};
 
-    bool onPaddle {true};
+    float xMax = 0;
+    float yMax = 0;
+
+    float xDir = DIR_UP;
+    float yDir = DIR_LEFT;
 };
 
 #endif // BREAKOUT_BALL_H

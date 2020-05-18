@@ -27,7 +27,7 @@ void Brick::Render() {
 
 SDL_Rect Brick::getEdges() const { return edges; }
 
-const SDL_Rect &Brick::getBounds() { return bound_box; }
+SDL_Rect Brick::getBounds() const { return bound_box; }
 
 bool Brick::isDestroyed() const { return destroyed; }
 

@@ -3,13 +3,23 @@
 //
 #include "Breakout.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     Controller game;
 
-    if (game.OnInit()) {
-        game.Loop();
+    // SDL_Init returns 0 on success, use not to invert to true
+    if (!(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))) {
+        window = SDL_CreateWindow("Breakout", SDL_WINDOWPOS_CENTERED,   // NOLINT(hicpp-signed-bitwise)
+                                  SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH,     // NOLINT(hicpp-signed-bitwise)
+                                  WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+
+        if (window != nullptr) {
+            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+            if (renderer != nullptr) {
+                game.Loop(window, renderer);
+            }
+        }
     }
 
     game.CleanUp();
 }
-
