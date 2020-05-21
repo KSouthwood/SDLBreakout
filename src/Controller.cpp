@@ -11,16 +11,6 @@ Controller::Controller() : running(true) {
 void Controller::CleanUp() {
     FUNC_CALL(CleanUp());
     textureMap.Cleanup();
-
-    if (renderer != nullptr) {
-        SDL_DestroyRenderer(renderer);
-    }
-
-    if (window != nullptr) {
-        SDL_DestroyWindow(window);
-    }
-
-    SDL_Quit();
 }
 
 void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
@@ -37,7 +27,7 @@ void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
             EventHandler(&event);
         }
 
-        ball.Move(paddle);
+        ball.Move(paddle, fpsControl);
         if (ball.outOfBounds) {
             if (--lives == 0) {
                 running = false;
@@ -61,12 +51,12 @@ void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
         }
 
         Render();
-        FPS::FPSControl.onLoop();
+        fpsControl.onLoop();
 
         if (title_timestamp + 1000 <= SDL_GetTicks()) {
             title_timestamp = SDL_GetTicks();
             std::string title =
-                "Breakout     FPS: " + std::to_string(FPS::FPSControl.getFPS()) + " Speed: " + std::to_string(FPS::FPSControl.getSpeed());
+                "Breakout     FPS: " + std::to_string(fpsControl.getFPS()) + " Speed: " + std::to_string(fpsControl.getSpeed());
             SDL_SetWindowTitle(sdlWindow, title.c_str());
         }
     }
@@ -89,9 +79,7 @@ void Controller::Render() {
 void Controller::LoadTextures() {
     FUNC_CALL(LoadTextures());
     paddle.CreatePaddle(window, renderer);
-//    textureMap.AddTexture(renderer, "ball", "ball.bmp");
     textureMap.AddTexture(renderer, "brick", "brick.bmp");
-//    ball = Ball(window, textureMap.GetID("ball"));
     ball.CreateBall(window, renderer);
     int width = textureMap.GetID("brick")->GetWidth();
     int height = textureMap.GetID("brick")->GetHeight();

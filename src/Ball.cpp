@@ -25,14 +25,14 @@ void Ball::CreateBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
     bound_box.y = static_cast<int>(position.y);
 }
 
-void Ball::Move(Paddle &paddle) {
+void Ball::Move(Paddle &paddle, FPS &fpsControl) {
     if (onPaddle) {
         SDL_Rect pos = paddle.getPosition();
         position.x = static_cast<float>(pos.x) + (static_cast<float>(pos.w) / 2.0f);
         position.y = static_cast<float>(pos.y) - RADIUS;
     } else {
-        position.x += xDir * FPS::FPSControl.getSpeed();
-        position.y += yDir * FPS::FPSControl.getSpeed();
+        position.x += xDir * fpsControl.getSpeed();
+        position.y += yDir * fpsControl.getSpeed();
 
         if (position.x <= RADIUS) {
             FlipXDir();

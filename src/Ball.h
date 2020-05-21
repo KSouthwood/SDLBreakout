@@ -18,7 +18,7 @@ class Ball {
     Ball();
     ~Ball();
 
-    void Move(Paddle &paddle);
+    void Move(Paddle &paddle, FPS &fpsControl);
     void Render();
     const SDL_Rect &getPosition() const;
     void FlipXDir();
@@ -41,7 +41,7 @@ class Ball {
 
     SDL_Color COLOR = {0xdd, 0xdd, 0xdd, 0xff};
     SDL_Renderer *renderer = nullptr;
-    SDL_Rect bound_box = {0, 0, RADIUS * 2, RADIUS * 2};
+    SDL_Rect bound_box = {0, 0, static_cast<int>(RADIUS * 2), static_cast<int>(RADIUS * 2)};
     SDL_FPoint position = {0.0, 0.0};
 
     float xMax = 0;

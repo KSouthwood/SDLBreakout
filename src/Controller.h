@@ -30,6 +30,7 @@ class Controller {
     Ball ball = Ball();
     std::list<Brick> bricks;
     Paddle paddle = Paddle();
+    FPS fpsControl = FPS();
 
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;

@@ -33,9 +33,9 @@ void Paddle::MouseMove(Sint32 new_pos) {
     position.x = new_pos;
 }
 
-void Paddle::KeyMove(int move) {
+void Paddle::KeyMove(int move, FPS fpsControl) {
     MouseMove(static_cast<float>(position.x) +
-              (static_cast<float>(move) * FPS::FPSControl.getSpeed()));
+              (static_cast<float>(move) * fpsControl.getSpeed()));
 }
 
 void Paddle::Render() {

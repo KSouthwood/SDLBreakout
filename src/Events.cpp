@@ -27,10 +27,10 @@ void Controller::EventHandler(SDL_Event *event) {
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
         case SDLK_LEFT:
-            paddle.KeyMove(-8);
+            paddle.KeyMove(-8, fpsControl);
             break;
         case SDLK_RIGHT:
-            paddle.KeyMove(8);
+            paddle.KeyMove(8, fpsControl);
             break;
         case SDLK_q:
             running = false;

@@ -3,9 +3,10 @@
 //
 
 #include "FPS.h"
-FPS FPS::FPSControl;
+#include <iostream>
 
 FPS::FPS() {
+    std::cout << "********** FPS() **********\n";
     timestamp = 0;
     frame_end = 0;
     frame_rate = 0;

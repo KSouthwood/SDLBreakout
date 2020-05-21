@@ -6,8 +6,8 @@
 
 #include "Controller.h"
 
-int WINDOW_WIDTH  = 480;
-int WINDOW_HEIGHT = 640;
+int WINDOW_WIDTH  = 960;
+int WINDOW_HEIGHT = 540;
 
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;

@@ -17,9 +17,18 @@ int main(int argc, char *argv[]) {
 
             if (renderer != nullptr) {
                 game.Loop(window, renderer);
+                game.CleanUp();
             }
         }
     }
 
-    game.CleanUp();
+    if (renderer != nullptr) {
+        SDL_DestroyRenderer(renderer);
+    }
+
+    if (window != nullptr) {
+        SDL_DestroyWindow(window);
+    }
+
+    SDL_Quit();
 }

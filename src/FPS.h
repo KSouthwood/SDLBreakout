@@ -9,8 +9,6 @@
 
 class FPS {
   public:
-    static FPS FPSControl;
-
     FPS();
     void onLoop();
     float getSpeed();
