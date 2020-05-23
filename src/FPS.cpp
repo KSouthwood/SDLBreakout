@@ -3,25 +3,21 @@
 //
 
 #include "FPS.h"
-#include <iostream>
 
-FPS::FPS() {
-    std::cout << "********** FPS() **********\n";
-    timestamp = 0;
-    frame_end = 0;
-    frame_rate = 0;
-    frames = 0;
-    speed = 0.0f;
-}
+FPS::FPS() { SDL_Log("********** FPS() **********"); }
+
+FPS::~FPS() { SDL_Log("********** ~FPS() **********"); }
 
 void FPS::onLoop() {
     if (timestamp + MS_SECOND < SDL_GetTicks()) {
-        timestamp = SDL_GetTicks();
+        timestamp  = SDL_GetTicks();
         frame_rate = frames;
-        frames = 0;
+        frames     = 0;
     }
 
-    speed = (static_cast<float>(SDL_GetTicks() - frame_end) / static_cast<float>(MS_SECOND)) * SPEED_FACTOR;
+    speed = (static_cast<float>(SDL_GetTicks() - frame_end) /
+             static_cast<float>(MS_SECOND)) *
+            SPEED_FACTOR;
     frame_end = SDL_GetTicks();
     ++frames;
 
@@ -32,6 +28,6 @@ void FPS::onLoop() {
     }
 }
 
-float FPS::getSpeed() { return speed; }
+float FPS::getSpeed() const { return speed; }
 
-int FPS::getFPS() { return frame_rate; }
+int FPS::getFPS() const { return frame_rate; }

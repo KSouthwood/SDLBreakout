@@ -6,43 +6,42 @@
 #define BREAKOUT_BALL_H
 
 #include <SDL2/SDL.h>
-#include <iostream>
 
-#include "Texture.h"
 #include "FPS.h"
 #include "Paddle.h"
+#include "Texture.h"
 
 class Ball {
   public:
-//    Ball(SDL_Window *window, Texture *texture);
     Ball();
     ~Ball();
 
-    void Move(Paddle &paddle, FPS &fpsControl);
-    void Render();
+    void move(Paddle &paddle, FPS &fpsControl);
+    void render();
     const SDL_Rect &getPosition() const;
-    void FlipXDir();
-    void FlipYDir();
+    void flipXDir();
+    void flipYDir();
     float getYDir() const;
-    void LaunchBall(float dir);
+    void launchBall(float dir);
     float getXDir() const;
-    void CreateBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
+    void createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
 
-    constexpr static float DIR_UP = -1.0f;
-    constexpr static float DIR_DOWN = 1.0f;
-    constexpr static float DIR_LEFT = -1.0f;
+    constexpr static float DIR_UP    = -1.0f;
+    constexpr static float DIR_DOWN  = 1.0f;
+    constexpr static float DIR_LEFT  = -1.0f;
     constexpr static float DIR_RIGHT = 1.0f;
 
     bool outOfBounds = false;
-    bool onPaddle = true;
+    bool onPaddle    = true;
 
   private:
     float RADIUS = 10.0;
 
-    SDL_Color COLOR = {0xdd, 0xdd, 0xdd, 0xff};
+    SDL_Color COLOR        = {0xdd, 0xdd, 0xdd, 0xff};
     SDL_Renderer *renderer = nullptr;
-    SDL_Rect bound_box = {0, 0, static_cast<int>(RADIUS * 2), static_cast<int>(RADIUS * 2)};
-    SDL_FPoint position = {0.0, 0.0};
+    SDL_Rect bound_box     = {0, 0, static_cast<int>(RADIUS * 2),
+                          static_cast<int>(RADIUS * 2)};
+    SDL_FPoint position    = {0.0, 0.0};
 
     float xMax = 0;
     float yMax = 0;

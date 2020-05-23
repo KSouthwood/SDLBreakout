@@ -10,20 +10,22 @@
 class FPS {
   public:
     FPS();
+    ~FPS();
+
     void onLoop();
-    float getSpeed();
-    int getFPS();
+    float getSpeed() const;
+    int getFPS() const;
 
   private:
-    unsigned int FPS_MAX = 120;
+    unsigned int FPS_MAX   = 120;
     unsigned int MS_SECOND = 1000;
-    float SPEED_FACTOR = 175.0;
+    float SPEED_FACTOR     = 175.0;
 
-    int timestamp;
-    int frame_end;
-    int frame_rate;
-    int frames;
-    float speed;
+    int timestamp  = 0;
+    int frame_end  = 0;
+    int frame_rate = 0;
+    int frames     = 0;
+    float speed    = 0.0;
 };
 
 #endif // BREAKOUT_FPS_H

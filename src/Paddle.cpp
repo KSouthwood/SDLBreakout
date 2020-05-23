@@ -4,26 +4,22 @@
 
 #include "Paddle.h"
 
-Paddle::Paddle() {
-    std::cout << "********** Paddle() **********\n";
-}
+Paddle::Paddle() { SDL_Log("********** Paddle() **********"); }
 
-Paddle::~Paddle() {
-    std::cout << "********** ~Paddle() **********\n"; //remove #include when deleting
-}
+Paddle::~Paddle() { SDL_Log("********** ~Paddle() **********"); }
 
-void Paddle::CreatePaddle(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+void Paddle::createPaddle(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
     this->renderer = sdlRenderer;
-    int width = 0;
-    int height = 0;
+    int width      = 0;
+    int height     = 0;
 
     SDL_GetWindowSize(sdlWindow, &width, &height);
     position.x = (width / 2) - (position.w / 2);
     position.y = height - 30;
-    xMax = width - position.w;
+    xMax       = width - position.w;
 }
 
-void Paddle::MouseMove(Sint32 new_pos) {
+void Paddle::mouseMove(Sint32 new_pos) {
     // subtract half the paddle size so the middle of the paddle tracks the
     // mouse
     new_pos -= position.w / 2;
@@ -33,15 +29,14 @@ void Paddle::MouseMove(Sint32 new_pos) {
     position.x = new_pos;
 }
 
-void Paddle::KeyMove(int move, FPS fpsControl) {
-    MouseMove(static_cast<float>(position.x) +
+void Paddle::keyMove(int move, FPS &fpsControl) {
+    mouseMove(static_cast<float>(position.x) +
               (static_cast<float>(move) * fpsControl.getSpeed()));
 }
 
-void Paddle::Render() {
-    boxRGBA(renderer,
-            position.x, position.y, position.x + position.w, position.y + position.h,
-            COLOR.r, COLOR.g, COLOR.b, COLOR.a);
+void Paddle::render() {
+    boxRGBA(renderer, position.x, position.y, position.x + position.w,
+            position.y + position.h, COLOR.r, COLOR.g, COLOR.b, COLOR.a);
 }
 
 const SDL_Rect &Paddle::getPosition() { return position; }

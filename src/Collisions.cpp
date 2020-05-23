@@ -3,7 +3,7 @@
 //
 #include "Controller.h"
 
-bool Controller::AABBCollisionCheck(const Brick &ccBrick) {
+bool Controller::collisionCheckAABB(const Brick &ccBrick) {
     if (ccBrick.isDestroyed()) {
         return false;
     }
@@ -33,7 +33,7 @@ bool Controller::AABBCollisionCheck(const Brick &ccBrick) {
     return ballMax > ballMin;
 }
 
-bool Controller::CircleCollisionCheck(const Brick &ccBrick) {
+bool Controller::collisionCheckCircle(const Brick &ccBrick) {
     if (ccBrick.isDestroyed()) {
         return false;
     }
@@ -60,8 +60,8 @@ bool Controller::CircleCollisionCheck(const Brick &ccBrick) {
         return true;
     }
 
-    int distance_squared = ((distance.x - (brickPos.w / 2)) ^ 2) +
-                           ((distance.y - (brickPos.h / 2)) ^ 2);
+    unsigned int distance_squared = ((distance.x - (brickPos.w / 2)) ^ 2) +
+                                    ((distance.y - (brickPos.h / 2)) ^ 2);
 
     if (distance_squared <= ((ballPos.w / 2) ^ 2)) {
         return true;
@@ -70,8 +70,8 @@ bool Controller::CircleCollisionCheck(const Brick &ccBrick) {
     return false;
 }
 
-void Controller::BounceBall(Brick &bBrick) {
-    FUNC_CALL(BounceBall());
+void Controller::bounceBall(Brick &bBrick) {
+    SDL_Log("********** bounceBall() **********");
     SDL_Rect ballPos  = ball.getPosition();
     SDL_Rect brickPos = bBrick.getEdges();
 
@@ -90,44 +90,44 @@ void Controller::BounceBall(Brick &bBrick) {
               << brickB << "\n";
 
     if (ballB >= brickB) {
-        ball.FlipYDir();
+        ball.flipYDir();
         std::cout << "ballB >= brickB, flipY" << std::endl;
     }
     if (ballT <= brickT) {
-        ball.FlipYDir();
+        ball.flipYDir();
         std::cout << "ballT <= brickT, flipY" << std::endl;
     }
     if (ballL <= brickL) {
-        ball.FlipXDir();
+        ball.flipXDir();
         std::cout << "ballL <= brickL, flipX" << std::endl;
     }
     if (ballR >= brickR) {
-        ball.FlipXDir();
+        ball.flipXDir();
         std::cout << "ballR >= brickR, flipX" << std::endl;
     }
 }
 
-void Controller::PaddleCollision() {
+void Controller::paddleCollision() {
     const SDL_Rect ball_pos = ball.getPosition();
     const SDL_Rect padd_pos = paddle.getPosition();
 
     if (ball_pos.y < padd_pos.y - ball_pos.h + 3) {
         if (ball.getYDir() == Ball::DIR_DOWN) {
-            ball.FlipYDir();
+            ball.flipYDir();
         }
 
         if (ball_pos.x < padd_pos.x + padd_pos.w / 2) {
             if (ball.getXDir() > 0.0f) {
-                ball.FlipXDir();
+                ball.flipXDir();
             }
         } else {
             if (ball.getXDir() < 0.0f) {
-                ball.FlipXDir();
+                ball.flipXDir();
             }
         }
     }
 }
 
-int Controller::Clamp(int value, int min, int max) {
+int Controller::clamp(int value, int min, int max) {
     return std::max(min, std::min(max, value));
 }
