@@ -14,6 +14,7 @@ void Controller::CleanUp() {
 }
 
 void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+    FUNC_CALL(Loop());
     this->window = sdlWindow;
     this->renderer = sdlRenderer;
 
@@ -21,6 +22,7 @@ void Controller::Loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
     SDL_Event event;
     int title_timestamp = SDL_GetTicks();
 
+    std::cout << "********** start loop **********\n";
     while (running) {
 
         while (SDL_PollEvent(&event)) {
@@ -69,7 +71,7 @@ void Controller::Render() {
     SDL_RenderClear(renderer);
 
     ball.Render();
-    for (auto brick : bricks) {
+    for (auto &brick : bricks) {
         brick.Render();
     }
     paddle.Render();
@@ -79,15 +81,13 @@ void Controller::Render() {
 void Controller::LoadTextures() {
     FUNC_CALL(LoadTextures());
     paddle.CreatePaddle(window, renderer);
-    textureMap.AddTexture(renderer, "brick", "brick.bmp");
     ball.CreateBall(window, renderer);
-    int width = textureMap.GetID("brick")->GetWidth();
-    int height = textureMap.GetID("brick")->GetHeight();
-    bricks = {};
     for (int row = 0; row < 6; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            bricks.emplace_back(textureMap.GetID("brick"));
-            bricks.back().SetPosition(col * width, 50 + (row * height));
+        for (int col = 0; col < 16; ++col) {
+            Brick brick = Brick(renderer);
+            bricks.emplace_back(brick);
+            bricks.back().SetPosition(col * brick.getBounds().w,
+                                      50 + (row * brick.getBounds().h));
         }
     }
 }

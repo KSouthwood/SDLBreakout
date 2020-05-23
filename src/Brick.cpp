@@ -3,25 +3,35 @@
 //
 
 #include "Brick.h"
+#include <iostream>
 
-Brick::Brick(Texture *texture)
-    : texture(texture), xPos(0), yPos(0), destroyed(false) {}
+Brick::Brick(SDL_Renderer *sdlRenderer)
+    : renderer(sdlRenderer) {
+    std::cout << "********** Brick() **********\n";
+}
 
-Brick::~Brick() {}
+Brick::~Brick() {
+    std::cout << "********** ~Brick() **********\n";
+}
 
 void Brick::SetPosition(int x, int y) {
     xPos = x;
     yPos = y;
-    bound_box = {xPos, yPos, texture->GetWidth(), texture->GetHeight()};
+    bound_box = {xPos, yPos, width, height};
     // use the .w & .h members to indicate the right and bottom edges so we
     // don't have to compute in the collision routines every time
-    edges = {xPos, yPos, xPos + texture->GetWidth(),
-             yPos + texture->GetHeight()};
+    edges = {xPos, yPos, xPos + width,
+             yPos + height};
 }
 
 void Brick::Render() {
     if (!destroyed) {
-        texture->Render(bound_box);
+        boxRGBA(renderer,
+                edges.x, edges.y, edges.w, edges.h,
+                brick_color.r, brick_color.g, brick_color.b, brick_color.a);
+        rectangleRGBA(renderer,
+                      edges.x, edges.y, edges.w, edges.h,
+                      0xff, 0xff, 0xff, 0xff);
     }
 }
 

@@ -28,7 +28,7 @@ class Controller {
 
     TextureMap textureMap;
     Ball ball = Ball();
-    std::list<Brick> bricks;
+    std::list<Brick> bricks {};
     Paddle paddle = Paddle();
     FPS fpsControl = FPS();
 
