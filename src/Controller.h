@@ -39,6 +39,7 @@ class Controller {
     void paddleCollision();
     static int clamp(int value, int min, int max);
     bool collisionCheckCircle(const Brick &a_brick);
+    void initBricks();
 };
 
 #endif // BREAKOUT_CONTROLLER_H

@@ -10,21 +10,23 @@ Brick::Brick(SDL_Renderer *sdlRenderer) : renderer(sdlRenderer) {
 
 Brick::~Brick() { SDL_Log("********** ~Brick() **********"); }
 
-void Brick::setPosition(int x, int y) {
-    xPos      = x;
-    yPos      = y;
-    bound_box = {xPos, yPos, width, height};
+Brick::Brick(SDL_Renderer *sdlRenderer, SDL_Rect a_position, SDL_Color a_color,
+             int a_score)
+    : bound_box(a_position), brick_color(a_color), renderer(sdlRenderer),
+      score(a_score) {
+    SDL_Log("********** Brick(pos, col, ren) **********");
     // use the .w & .h members to indicate the right and bottom edges so we
     // don't have to compute in the collision routines every time
-    edges = {xPos, yPos, xPos + width, yPos + height};
+    edges = {a_position.x, a_position.y, a_position.x + a_position.w,
+             a_position.y + a_position.h};
 }
 
 void Brick::render() {
     if (!destroyed) {
         boxRGBA(renderer, edges.x, edges.y, edges.w, edges.h, brick_color.r,
                 brick_color.g, brick_color.b, brick_color.a);
-        rectangleRGBA(renderer, edges.x, edges.y, edges.w, edges.h, 0xff, 0xff,
-                      0xff, 0xff);
+        rectangleRGBA(renderer, edges.x, edges.y, edges.w, edges.h, 0x00, 0x00,
+                      0x00, 0xff);
     }
 }
 

@@ -12,9 +12,10 @@
 class Brick {
   public:
     Brick(SDL_Renderer *sdlRenderer);
+    Brick(SDL_Renderer *sdlRenderer, SDL_Rect a_position, SDL_Color a_color,
+          int a_score);
     ~Brick();
 
-    void setPosition(int x, int y);
     void render();
     SDL_Rect getBounds() const;
     SDL_Rect getEdges() const;
@@ -22,17 +23,13 @@ class Brick {
     void setDestroyed(bool flag);
 
   private:
-    int xPos   = 0;
-    int yPos   = 0;
-    int width  = 60;
-    int height = 30;
-
-    SDL_Rect bound_box    = {xPos, yPos, width, height};
-    SDL_Rect edges        = {xPos, yPos, width, height};
+    SDL_Rect bound_box    = {0, 0, 0, 0};
+    SDL_Rect edges        = {0, 0, 0, 0};
     SDL_Color brick_color = {0x00, 0x00, 0x00, 0xff};
 
     SDL_Renderer *renderer = nullptr;
     bool destroyed         = false;
+    int score = 0;
 };
 
 #endif // BREAKOUT_BRICK_H
