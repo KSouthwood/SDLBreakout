@@ -35,12 +35,10 @@ class Controller {
 
     void render();
     void eventHandler(SDL_Event *event);
-    bool collisionCheckAABB(const Brick &ccBrick);
-    void bounceBall(Brick &bBrick);
     void initGame();
     void paddleCollision();
-    int clamp(int value, int min, int max);
-    bool collisionCheckCircle(const Brick &ccBrick);
+    static int clamp(int value, int min, int max);
+    bool collisionCheckCircle(const Brick &a_brick);
 };
 
 #endif // BREAKOUT_CONTROLLER_H

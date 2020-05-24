@@ -60,7 +60,11 @@ void Ball::render() {
                      COLOR.r, COLOR.g, COLOR.b, COLOR.a);
 }
 
-const SDL_Rect &Ball::getPosition() const { return bound_box; }
+// Get the center position of the ball
+SDL_FPoint &Ball::getPosition() { return position; }
+
+// Get the bounding box of the ball
+const SDL_Rect &Ball::getBounds() const { return bound_box; }
 
 void Ball::flipXDir() { xDir *= -1.0f; }
 void Ball::flipYDir() { yDir *= -1.0f; }

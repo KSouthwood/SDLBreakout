@@ -18,7 +18,8 @@ class Ball {
 
     void move(Paddle &paddle, FPS &fpsControl);
     void render();
-    const SDL_Rect &getPosition() const;
+    const SDL_Rect &getBounds() const;
+    SDL_FPoint &getPosition();
     void flipXDir();
     void flipYDir();
     float getYDir() const;

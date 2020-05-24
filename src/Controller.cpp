@@ -37,14 +37,13 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
         }
 
         for (auto &brick : bricks) {
-            //            if (collisionCheckAABB(brick)) {
             if (collisionCheckCircle(brick)) {
-                bounceBall(brick);
                 brick.setDestroyed(true);
+                break;
             }
         }
 
-        if (SDL_HasIntersection(&ball.getPosition(), &paddle.getPosition())) {
+        if (SDL_HasIntersection(&ball.getBounds(), &paddle.getPosition())) {
             paddleCollision();
         }
 
