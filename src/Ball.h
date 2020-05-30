@@ -16,24 +16,24 @@ class Ball {
     Ball();
     ~Ball();
 
-    void move(Paddle &paddle, FPS &fpsControl);
+    bool move(Paddle &paddle, FPS &fpsControl);
     void render();
-    const SDL_Rect &getBounds() const;
-    SDL_FPoint &getPosition();
+    void createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
+    void reset();
+    void launchBall(float dir);
     void flipXDir();
     void flipYDir();
+
+    const SDL_Rect &getBounds() const;
+    SDL_FPoint &getPosition();
+    float getRadius();
     float getYDir() const;
-    void launchBall(float dir);
     float getXDir() const;
-    void createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
 
     constexpr static float DIR_UP    = -1.0f;
     constexpr static float DIR_DOWN  = 1.0f;
     constexpr static float DIR_LEFT  = -1.0f;
     constexpr static float DIR_RIGHT = 1.0f;
-
-    bool outOfBounds = false;
-    bool onPaddle    = true;
 
   private:
     float RADIUS = 10.0;
@@ -43,12 +43,11 @@ class Ball {
     SDL_Rect bound_box     = {0, 0, static_cast<int>(RADIUS * 2),
                           static_cast<int>(RADIUS * 2)};
     SDL_FPoint position    = {0.0, 0.0};
+    SDL_FPoint direction   = {DIR_UP, DIR_LEFT};
 
-    float xMax = 0;
-    float yMax = 0;
-
-    float xDir = DIR_UP;
-    float yDir = DIR_LEFT;
+    float xMax    = 0;
+    float yMax    = 0;
+    bool onPaddle = true;
 };
 
 #endif // BREAKOUT_BALL_H

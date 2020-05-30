@@ -25,14 +25,12 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
             eventHandler(&event);
         }
 
-        ball.move(paddle, fpsControl);
-        if (ball.outOfBounds) {
+        if (!ball.move(paddle, fpsControl)) {
             if (--lives == 0) {
                 running = false;
                 break;
             } else {
-                ball.onPaddle    = true;
-                ball.outOfBounds = false;
+                ball.reset();
             }
         }
 
@@ -40,7 +38,10 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
             if (collisionCheckCircle(*brick)) {
                 brick->setDestroyed(true);
                 bricks.erase(brick);
-                if (bricks.empty()) { running = false; }
+                if (bricks.empty()) {
+                    ball.reset();
+                    initBricks();
+                }
                 break;
             }
         }
