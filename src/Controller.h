@@ -16,12 +16,13 @@
 
 class Controller {
   public:
-    Controller();
+    Controller(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
 
-    void cleanUp();
-    void loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
+    static void cleanUp();
+    void loop();
 
   private:
+    int score    = 0;
     int lives    = 3;
     bool running = false;
 

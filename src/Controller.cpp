@@ -4,18 +4,17 @@
 
 #include "Controller.h"
 
-Controller::Controller() : running(true) {
-    SDL_Log("********** Controller() **********");
+Controller::Controller(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer)
+    : running(true), window(sdlWindow), renderer(sdlRenderer) {
+    SDL_Log("********** Controller(window, renderer) **********");
+    initGame();
 }
 
 void Controller::cleanUp() { SDL_Log("********** cleanUp() **********"); }
 
-void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
+void Controller::loop() {
     SDL_Log("********** loop() **********");
-    this->window   = sdlWindow;
-    this->renderer = sdlRenderer;
 
-    initGame();
     SDL_Event event;
     int title_timestamp = SDL_GetTicks();
 
@@ -28,7 +27,7 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
         if (!ball.move(paddle, fpsControl)) {
             if (--lives == 0) {
                 running = false;
-                break;
+                break;  // skip everything else in the while(running) loop
             } else {
                 ball.reset();
             }
@@ -36,8 +35,9 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
 
         for (auto brick = bricks.begin(); brick != bricks.end(); ++brick) {
             if (collisionCheckCircle(*brick)) {
-                brick->setDestroyed(true);
+//                brick->setDestroyed(true);
                 bricks.erase(brick);
+                score += brick->getScore();
                 if (bricks.empty()) {
                     ball.reset();
                     initBricks();
@@ -56,9 +56,11 @@ void Controller::loop(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
         if (title_timestamp + 1000 <= SDL_GetTicks()) {
             title_timestamp = SDL_GetTicks();
             std::string title =
-                "Breakout     FPS: " + std::to_string(fpsControl.getFPS()) +
-                " Speed: " + std::to_string(fpsControl.getSpeed());
-            SDL_SetWindowTitle(sdlWindow, title.c_str());
+                "Lives: " + std::to_string(lives) + "   " +
+                "Score: " + std::to_string(score) + "     BREAKOUT     " +
+                "FPS: " + std::to_string(fpsControl.getFPS()) + "   " +
+                "Speed: " + std::to_string(fpsControl.getSpeed());
+            SDL_SetWindowTitle(window, title.c_str());
         }
     }
 }
@@ -79,8 +81,8 @@ void Controller::render() {
 
 void Controller::initGame() {
     SDL_Log("********** initGame() **********");
-    paddle.createPaddle(window, renderer);
     ball.createBall(window, renderer);
+    paddle.createPaddle(window, renderer);
     initBricks();
 }
 
@@ -94,17 +96,18 @@ void Controller::initBricks() {
         {0x34, 0x7c, 0x98, 0xff}  // blue-green
     };
 
-    int color = 0;
-    int width = 60;
+    int color  = 0;
+    int width  = 60;
     int height = 30;
 
     for (int row = 0; row < 6; ++row) {
         for (int col = 0; col < 16; ++col) {
             SDL_Color brick_color = colors[color];
-            SDL_Rect brick_pos = {col * width, 50 + (row * height), width, height};
-            bricks.emplace_back(Brick(renderer, brick_pos, brick_color, (6 - row)));
+            SDL_Rect brick_pos    = {col * width, 50 + (row * height), width,
+                                  height};
+            bricks.emplace_back(
+                Brick(renderer, brick_pos, brick_color, (6 - row)));
         }
         ++color;
     }
-
 }

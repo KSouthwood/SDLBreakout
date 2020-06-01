@@ -4,8 +4,6 @@
 #include "Breakout.h"
 
 int main(int argc, char *argv[]) {
-    Controller game;
-
     // SDL_Init returns 0 on success, use not to invert to true
     if (!(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))) {
         window = SDL_CreateWindow(
@@ -20,7 +18,8 @@ int main(int argc, char *argv[]) {
 
             if (renderer != nullptr) {
                 SDL_Log("SDL_CreateRenderer successful.");
-                game.loop(window, renderer);
+                Controller game = Controller(window, renderer);
+                game.loop();
                 SDL_Log("Game over. Cleaning up.");
                 game.cleanUp();
             }

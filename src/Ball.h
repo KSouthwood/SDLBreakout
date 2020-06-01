@@ -13,8 +13,9 @@
 
 class Ball {
   public:
+
     Ball();
-    ~Ball();
+    //    ~Ball();
 
     bool move(Paddle &paddle, FPS &fpsControl);
     void render();
@@ -26,7 +27,7 @@ class Ball {
 
     const SDL_Rect &getBounds() const;
     SDL_FPoint &getPosition();
-    float getRadius();
+    float getRadius() const;
     float getYDir() const;
     float getXDir() const;
 

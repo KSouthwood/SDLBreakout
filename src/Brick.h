@@ -21,6 +21,7 @@ class Brick {
     SDL_Rect getEdges() const;
     bool isDestroyed() const;
     void setDestroyed(bool flag);
+    int getScore() const;
 
   private:
     SDL_Rect bound_box    = {0, 0, 0, 0};

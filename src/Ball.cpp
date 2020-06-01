@@ -6,7 +6,7 @@
 
 Ball::Ball() { SDL_Log("********** Ball() **********"); }
 
-Ball::~Ball() { SDL_Log("********** ~Ball() **********"); }
+// Ball::~Ball() { SDL_Log("********** ~Ball() **********"); }
 
 void Ball::createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
     SDL_Log("********** createBall() **********");
@@ -14,8 +14,8 @@ void Ball::createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
     int win_y = 0;
     SDL_GetWindowSize(sdlWindow, &win_x, &win_y);
     this->renderer = sdlRenderer;
-    position.x     = static_cast<float>(win_x) / 2.0f;
-    position.y     = static_cast<float>(win_y) - 50.0f;
+    position       = {static_cast<float>(win_x) / 2.0f,
+                static_cast<float>(win_y) - 50.0f};
     xMax           = static_cast<float>(win_x) - this->RADIUS;
     yMax           = static_cast<float>(win_y) - this->RADIUS;
     bound_box.x    = static_cast<int>(position.x);
@@ -91,4 +91,4 @@ void Ball::launchBall(float dir) {
         direction.x = dir;
     }
 }
-float Ball::getRadius() { return RADIUS; }
+float Ball::getRadius() const { return RADIUS; }

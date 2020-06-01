@@ -37,3 +37,4 @@ SDL_Rect Brick::getBounds() const { return bound_box; }
 bool Brick::isDestroyed() const { return destroyed; }
 
 void Brick::setDestroyed(bool flag) { destroyed = flag; }
+int Brick::getScore() const { return score; }
