@@ -22,8 +22,8 @@ class Ball {
     void createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer);
     void reset();
     void launchBall(float dir);
-    void flipXDir();
-    void flipYDir();
+    void setXDir(float new_dir);
+    void setYDir(float new_dir);
 
     const SDL_Rect &getBounds() const;
     SDL_FPoint &getPosition();
@@ -44,7 +44,7 @@ class Ball {
     SDL_Rect bound_box     = {0, 0, static_cast<int>(RADIUS * 2),
                           static_cast<int>(RADIUS * 2)};
     SDL_FPoint position    = {0.0, 0.0};
-    SDL_FPoint direction   = {DIR_UP, DIR_LEFT};
+    SDL_FPoint direction   = {DIR_LEFT, DIR_UP};
 
     float xMax    = 0;
     float yMax    = 0;

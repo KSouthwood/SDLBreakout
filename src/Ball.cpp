@@ -25,6 +25,7 @@ void Ball::createBall(SDL_Window *sdlWindow, SDL_Renderer *sdlRenderer) {
 void Ball::reset() {
     SDL_Log("********** ball.reset() **********");
     onPaddle = true;
+    direction = {DIR_LEFT, DIR_UP};
 }
 
 /*
@@ -43,17 +44,17 @@ bool Ball::move(Paddle &paddle, FPS &fpsControl) {
         position.y += direction.y * fpsControl.getSpeed();
 
         if (position.x <= RADIUS) {
-            flipXDir();
+            setXDir(-(direction.x));
             position.x = RADIUS;
         }
 
         if (position.x >= xMax) {
-            flipXDir();
+            setXDir(-(direction.x));
             position.x = xMax;
         }
 
         if (position.y <= RADIUS) {
-            flipYDir();
+            setYDir(-(direction.y));
             position.y = RADIUS;
         }
 
@@ -79,8 +80,8 @@ SDL_FPoint &Ball::getPosition() { return position; }
 // Get the bounding box of the ball
 const SDL_Rect &Ball::getBounds() const { return bound_box; }
 
-void Ball::flipXDir() { direction.x *= -1.0f; }
-void Ball::flipYDir() { direction.y *= -1.0f; }
+void Ball::setXDir(float new_dir) { direction.x = new_dir; }
+void Ball::setYDir(float new_dir) { direction.y = new_dir; }
 
 float Ball::getXDir() const { return direction.x; }
 float Ball::getYDir() const { return direction.y; }

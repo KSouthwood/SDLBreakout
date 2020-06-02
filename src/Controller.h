@@ -38,7 +38,7 @@ class Controller {
     void eventHandler(SDL_Event *event);
     void initGame();
     void paddleCollision();
-    static int clamp(int value, int min, int max);
+    static int clamp(float f_value, int min, int max);
     bool collisionCheckCircle(const Brick &a_brick);
     void initBricks();
 };
